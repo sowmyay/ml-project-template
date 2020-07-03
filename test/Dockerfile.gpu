@@ -1,0 +1,27 @@
+FROM nvidia/cuda:10.1-cudnn7-runtime
+
+WORKDIR /usr/src/app
+
+ENV LANG="C.UTF-8" LC_ALL="C.UTF-8" PATH="/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" PIP_NO_CACHE_DIR="false"
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    python3 python3-pip python3-venv && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+
+RUN python3 -m venv /opt/venv &&     python3 -m pip install pip==19.3.1 pip-tools==4.2.0 setuptools==41.4.0
+
+RUN echo "https://download.pytorch.org/whl/cu101/torch-1.4.0-cp36-cp36m-linux_x86_64.whl       \
+          --hash=sha256:8856f334aa9ecb742c1504bd2563d0ffb8dceb97149c8d72a04afa357f667dbc       \
+          \n                                                                                   \
+          https://download.pytorch.org/whl/cu101/torchvision-0.5.0-cp36-cp36m-linux_x86_64.whl \
+          --hash=sha256:df994daf1b04a183779538022fb4345b66364fccf66b33e1095ae8d4955a5406       \
+          \n" >> requirements.txt
+
+RUN python3 -m piptools sync
+
+COPY . .
+
+ENTRYPOINT ["/usr/src/app/bin/test"]
+CMD ["-h"]
