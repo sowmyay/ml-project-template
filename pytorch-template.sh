@@ -1,4 +1,4 @@
-#! /bin/bash 
+#!/bin/bash
 
 echo "ML project named" $1
 eval "mkdir -p $1/{$1/cli,bin,notebooks}"

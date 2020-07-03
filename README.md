@@ -2,14 +2,19 @@
 
 This project is aimed to automate the boiler plate code for most machine learning projects.
 
-It includes an executable shell script [ml-template-mkdir.sh](ml-template-mkdir.sh)
+It includes an executable shell script [pytorch-template.sh](pytorch-template.sh)
+
+*TODO*:
+Add boiler plate support for other languages
+- [ ] tensorflow
+- [ ] keras
 
 # Usage
-1. Download or copy the test in the executable script to your projects folder
-2. Navigate to your projects folder containing  `ml-template-mkdir.sh`
-3. Execute the script as follows. Replace test with the desired name for your repository -
+1. Download the executable script to your projects folder
+2. Navigate to your projects folder containing the script
+3. Run the script as follows. Replace `test` with project name of your choice -
 ```commandline
-bash ml-template-mkdir.sh test
+bash pytorch-template.sh test
 ```
 
 This creates a project directory in your current folder similar to -
