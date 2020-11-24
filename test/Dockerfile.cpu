@@ -1,27 +1,25 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
-WORKDIR /usr/src/app
-
-ENV LANG="C.UTF-8" LC_ALL="C.UTF-8" PATH="/opt/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" PIP_NO_CACHE_DIR="false"
+ENV LANG="C.UTF-8" LC_ALL="C.UTF-8" PATH="/home/python/.poetry/bin:/home/python/.local/bin:$PATH" PIP_NO_CACHE_DIR="false"
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    python3 python3-pip python3-venv && \
+    python3 python3-pip python3-venv python-is-python3 curl ca-certificates vim && \
     rm -rf /var/lib/apt/lists/*
 
-COPY requirements.txt .
+RUN groupadd --gid 1000 python && \
+    useradd  --uid 1000 --gid python --shell /bin/bash --create-home python
 
-RUN python3 -m venv /opt/venv && python3 -m pip install pip==19.3.1 pip-tools==4.2.0 setuptools==45.2.0
+USER 1000
+RUN mkdir /home/python/app
+WORKDIR /home/python/app
 
-RUN echo "https://download.pytorch.org/whl/cpu/torch-1.4.0%2Bcpu-cp36-cp36m-linux_x86_64.whl       \
-          --hash=sha256:f20312fc168147e6b152e8a335bc916cc0b86a39d9a39c69d0223ffa99b72de4           \
-          \n                                                                                       \
-          https://download.pytorch.org/whl/cpu/torchvision-0.5.0%2Bcpu-cp36-cp36m-linux_x86_64.whl \
-          --hash=sha256:ae3686f57a56c71ee7cc001bb067b3ebb246f1d6abc8b9023f7d7d043a4f8b83           \
-          \n" >> requirements.txt
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/d2fd581c9a856a5c4e60a25acb95d06d2a963cf2/get-poetry.py | python - --version 1.0.10
+RUN poetry config virtualenvs.create false
 
-RUN python3 -m piptools sync
+COPY --chown=python:python pyproject.toml poetry.lock ./
+RUN poetry install --no-interaction --no-root --ansi
 
-COPY . .
+RUN python3 -m pip install torch==1.7.0+cpu torchvision==0.8.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
 
-ENTRYPOINT ["/usr/src/app/bin/test"]
-CMD ["-h"]"
+COPY --chown=python:python . .
+RUN poetry install --no-interaction --ansi

@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "test"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+tqdm = "^4.53.0"
+pandas = "^1.1.4"
+numpy = "^1.19.4"
+sklearn = "^0.0"
+tensorboard = "^2.4.0"
+einops = "^0.3.0"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+test = "template.cli.__main__:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
