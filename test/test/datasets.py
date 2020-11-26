@@ -16,5 +16,5 @@ class DummyDataset(Dataset):
 		item = np.load(path, allow_pickle=False)
 		target = True
 		if self.transform:
-			item = self.tranform(item)
+			item = self.transform(item)
 		return item, target

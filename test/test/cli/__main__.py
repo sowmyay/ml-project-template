@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 
 import test.cli.train
-
+import test.cli.predict
 
 parser = argparse.ArgumentParser(prog="test")
 
