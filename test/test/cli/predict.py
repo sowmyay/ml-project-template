@@ -1,3 +1,17 @@
+import sys
+
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader
+from torchvision.transforms import Compose
+
+from tqdm import tqdm
+
+from test.models import DummyModel
+from test.transforms import DummyTransform
+from test.datasets import DummyDataset
+
+
 def main(args):
     if torch.cuda.is_available():
         print("🐎 Running on GPU(s)", file=sys.stderr)
@@ -20,19 +34,17 @@ def main(args):
 
     dataset = DummyDataset(args.dataset, transform=transforms)
 
-    loader = DataLoader(dataset, batch_size=args.batch_size,
-                              num_workers=args.num_workers, shuffle=False)
+    loader = DataLoader(dataset, batch_size=args.batch_size, num_workers=args.num_workers, shuffle=False)
 
     chkpt = torch.load(args.checkpoint, map_location=device)
     model.load_state_dict(chkpt["state_dict"])
 
-    predict(model, item)
+    predict(model, device, loader)
 
-def predict(model, device, dataloader, dataset):
+
+def predict(model, device, data_loader):
     with torch.no_grad():
-        for item in tqdm(dataloader, desc="predict", unit="batch"):
+        for item in tqdm(data_loader, desc="predict", unit="batch"):
             item.to(device)
-
             output = model(item)
-
     return

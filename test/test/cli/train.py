@@ -50,6 +50,7 @@ def main(args):
     optimizer = Adam(model.parameters(), lr=1e-4)
     criterion = nn.NLLLoss()
 
+    best_loss = float("inf")
     resume = 0
     if args.checkpoint:
         chkpt = torch.load(args.checkpoint, map_location=device)
@@ -58,6 +59,7 @@ def main(args):
         if args.resume:
             optimizer.load_state_dict(chkpt["optimizer"])
             resume = chkpt["epoch"]
+            best_loss = chkpt["val_loss"]
 
     if resume >= args.num_epochs:
         sys.exit("Error: Epoch {} set in {} already reached by the checkpoint provided".format(args.num_epochs,
@@ -67,36 +69,40 @@ def main(args):
         print("Epoch {}/{}".format(epoch, args.num_epochs - 1))
         print("-" * 10)
 
-        train_loss = train_step(model, criterion=criterion, device=device, dataloader=train_loader,
+        train_loss = train_step(model, criterion=criterion, device=device, data_loader=train_loader,
                                 dataset=train_dataset, optimizer=optimizer, writer=writer)
 
         print("train loss: {:.4f}".format(train_loss))
 
-        val_loss = validation_step(model, criterion=criterion, device=device, dataloader=val_loader,
+        val_loss = validation_step(model, criterion=criterion, device=device, data_loader=val_loader,
                                    dataset=val_dataset, writer=writer)
 
         print("val loss: {:.4f}".format(val_loss))
 
-        checkpoint = args.model / "checkpoint-{:05d}-of-{:05d}.pth".format(epoch + 1, args.num_epochs)
-        states = {"epoch": epoch + 1, "state_dict": model.state_dict(), "optimizer": optimizer.state_dict()}
-        torch.save(states, checkpoint)
+        if val_loss < best_loss:
+            best_loss = val_loss
+            checkpoint = args.model / "beat-checkpoint.pth"
+            states = {"epoch": epoch + 1,
+                      "state_dict": model.state_dict(),
+                      "optimizer": optimizer.state_dict(),
+                      "val_loss": val_loss,
+                      "train_loss": train_loss}
+            torch.save(states, checkpoint)
 
     writer.close()
 
 
-def train_step(model, criterion, device, dataloader, dataset, optimizer, writer):
+def train_step(model, criterion, device, data_loader, dataset, optimizer, writer):
     model.train()
 
     global train_counter
     running_loss = 0.0
-    batch = 1
-    for item, target in tqdm(dataloader, desc="train", unit="batch"):
+    epoch_counter = 0
+    for item, target in tqdm(data_loader, desc="train", unit="batch"):
         item.to(device)
         target.to(device)
 
         optimizer.zero_grad()
-
-        loss = 0
 
         output = model(item)
         loss = criterion(output, target)
@@ -105,23 +111,24 @@ def train_step(model, criterion, device, dataloader, dataset, optimizer, writer)
         optimizer.step()
         running_loss += loss.item() * item.size(0)
 
-        if train_counter % 100 == 0:
-            writer.add_scalar("Loss/train", running_loss / batch * item.size(0), train_counter)
+        epoch_counter += item.size(0)
 
-        batch += 1
+        if train_counter % 100 == 0:
+            writer.add_scalar("Loss/train", running_loss / epoch_counter, train_counter)
+
         train_counter += 1
 
     return running_loss / len(dataset)
 
 
-def validation_step(model, criterion, device, dataloader, dataset, writer):
+def validation_step(model, criterion, device, data_loader, dataset, writer):
     model.eval()
 
     global valid_counter
     running_loss = 0.0
-    batch = 1
+    epoch_counter = 0
     with torch.no_grad():
-        for item, target in tqdm(dataloader, desc="val", unit="batch"):
+        for item, target in tqdm(data_loader, desc="val", unit="batch"):
             item.to(device)
             target.to(device)
 
@@ -129,9 +136,9 @@ def validation_step(model, criterion, device, dataloader, dataset, writer):
             loss = criterion(output, target)
             running_loss += loss.item() * item.size(0)
 
+            epoch_counter += item.size(0)
             if valid_counter % 100 == 0:
-                writer.add_scalar("Loss/eval", running_loss / batch * item.size(0), valid_counter)
-            batch += 1
+                writer.add_scalar("Loss/eval", running_loss / epoch_counter, valid_counter)
             valid_counter += 1
 
     return running_loss / len(dataset)
