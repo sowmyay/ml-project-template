@@ -7,9 +7,9 @@ from torchvision.transforms import Compose
 
 from tqdm import tqdm
 
-from test.models import DummyModel
-from test.transforms import DummyTransform
-from test.datasets import DummyDataset
+from template.models import DummyModel
+from template.transforms import DummyTransform
+from template.datasets import DummyDataset
 
 
 def main(args):

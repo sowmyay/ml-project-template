@@ -1,4 +1,4 @@
-## test
+## template
 
 ## Usage
 
@@ -16,16 +16,28 @@ By default we build and run the CPU Docker images; for GPUs run:
 
 ```
 make dockerfile=Dockerfile.gpu
-make gpu
+make gpu datadir=/path/to/dataset
 ```
 
 ## Preprocessing
 
 
 ## Model training
-
+```bash
+poetry run template train --dataset /data/train \
+--model /data/models \
+--num-workers 12 \
+--batch-size 512 \
+--num-epochs 100
+```
 
 ## Prediction
+```bash
+poetry run template predict --dataset /data/predict \
+--checkpoint /data/models/best-checkpoint.pth \
+--num-workers 12 \
+--batch-size 512
+```
 
 ## References
 

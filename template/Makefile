@@ -1,4 +1,4 @@
-dockerimage ?= test
+dockerimage ?= template
 dockerfile ?= Dockerfile.cpu
 srcdir ?= $(shell pwd)
 datadir ?= $(shell pwd)
@@ -16,7 +16,7 @@ u: update
 
 
 run:
-	@docker run --ipc=host -it --rm -v $(srcdir):/usr/src/app/ -v $(datadir):/data --entrypoint=/bin/bash $(dockerimage)
+	@docker run --ipc=host -it --rm -v $(srcdir):/home/python/app/ -v $(datadir):/data --entrypoint=/bin/bash $(dockerimage)
 
 r: run
 
@@ -26,7 +26,7 @@ tensorboard:
 t: tensorboard
 
 gpu:
-	@docker run --runtime=nvidia --ipc=host -it --rm -v $(srcdir):/usr/src/app/ -v $(datadir):/data --entrypoint=/bin/bash $(dockerimage)
+	@docker run --runtime=nvidia --ipc=host -it --rm -v $(srcdir):/home/python/app/ -v $(datadir):/data --entrypoint=/bin/bash $(dockerimage)
 
 g: gpu
 

@@ -9,9 +9,9 @@ from torch.utils.data import DataLoader, random_split
 
 from tqdm import tqdm
 
-from test.models import DummyModel
-from test.datasets import DummyDataset
-from test.transforms import DummyTransform
+from template.models import DummyModel
+from template.datasets import DummyDataset
+from template.transforms import DummyTransform
 
 train_counter = 0
 valid_counter = 0
