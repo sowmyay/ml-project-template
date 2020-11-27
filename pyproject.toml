@@ -1,8 +1,16 @@
 [tool.poetry]
 name = "mltemplate"
-version = "0.1.0"
+version = "0.3.0"
 description = "Easy ML project skeleton"
-authors = ["Sowmya <sowmyayellapragada@gmail.com>"]
+authors = ["Sowmya Yellapragada <sowmyayellapragada@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/sowmyay/ml-project-template"
+repository = "https://github.com/sowmyay/ml-project-template"
+keywords = ["template", "machine learning", "pytorch", "deep learning"]
+include = [
+    "LICENSE",
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
