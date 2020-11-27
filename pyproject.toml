@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "MlTemplateBuilder"
-version = "0.1.0"
+name = "mltemplate"
+version = "0.2.1"
 description = "Easy ML project skeleton"
 authors = ["Sowmya <sowmyayellapragada@gmail.com>"]
 
@@ -10,7 +10,7 @@ python = "^3.7"
 [tool.poetry.dev-dependencies]
 
 [tool.poetry.scripts]
-build_template = "MlTemplateBuilder.cli.__main__:main"
+mltemplate = "mltemplate.cli.__main__:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
