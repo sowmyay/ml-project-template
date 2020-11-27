@@ -2,7 +2,7 @@
 
 This project is aimed to automate the boiler plate code for most machine learning projects.
 
-It includes an executable shell script [pytorch-template.sh](pytorch-template.sh)
+It includes an executable shell script [pytorch-template.sh](mltemplate/scripts/pytorch-template.sh)
 
 *TODO*:
 Add boiler plate support for other languages
