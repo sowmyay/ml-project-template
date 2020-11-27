@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "mltemplate"
+version = "0.1.0"
+description = "Easy ML project skeleton"
+authors = ["Sowmya <sowmyayellapragada@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+mltemplate = "mltemplate.cli.__main__:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -2,7 +2,7 @@
 
 This project is aimed to automate the boiler plate code for most machine learning projects.
 
-It includes an executable shell script [pytorch-template.sh](pytorch-template.sh)
+It includes an executable shell script [pytorch-template.sh](mltemplate/scripts/pytorch-template.sh)
 
 *TODO*:
 Add boiler plate support for other languages
@@ -19,24 +19,23 @@ bash pytorch-template.sh test
 
 This creates a project directory in your current folder similar to -
 ```markdown
-test
-├── bin
-│   └── test
+template
 ├── Dockerfile.cpu
 ├── Dockerfile.gpu
 ├── Makefile
+├── pyproject.toml
+├── poetry.lock
 ├── notebooks
 ├── README.md
-├── requirements.in
-└── test
+└── template
     ├── cli
     │   ├── __init__.py
     │   ├── __main__.py
     │   ├── predict.py
     │   └── train.py
-    ├── datasets.py
     ├── __init__.py
     ├── models.py
+    ├── datasets.py
     └── transforms.py
 ```
 Checkout the `README.md` in the directory to see how to build and run the docker image.
