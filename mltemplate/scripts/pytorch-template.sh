@@ -1,10 +1,10 @@
 #!/bin/bash
 
-echo "ML project named" $1
+echo "Creating ML template for " $1
 eval "mkdir -p $1/{$1/cli,notebooks}"
 eval "touch $1/$1/cli/{__init__,__main__,train,predict}.py"
 eval "touch $1/$1/{__init__,models,transforms,datasets}.py"
-eval "touch $1/{.flake8,.gitignore,.dockerignore,Makefile,Dockerfile.cpu,Dockerfile.gpu,README.md,pyproject.toml}"
+eval "touch $1/{.flake8,.gitignore,.dockerignore,Makefile,Dockerfile.cpu,Dockerfile.gpu,README.md,LICENSE.md,pyproject.toml}"
 
 cat <<END > "$1"/.flake8
 [flake8]
@@ -17,13 +17,13 @@ END
 cat <<END > "$1"/Dockerfile.cpu
 FROM ubuntu:20.04
 
-ENV LANG="C.UTF-8" LC_ALL="C.UTF-8" PATH="/home/python/.poetry/bin:/home/python/.local/bin:$PATH" PIP_NO_CACHE_DIR="false"
+ENV LANG="C.UTF-8" LC_ALL="C.UTF-8" PATH="/home/python/.poetry/bin:/home/python/.local/bin:\$PATH" PIP_NO_CACHE_DIR="false"
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    python3 python3-pip python3-venv python-is-python3 curl ca-certificates vim && \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \\
+    python3 python3-pip python3-venv python-is-python3 curl ca-certificates vim && \\
     rm -rf /var/lib/apt/lists/*
 
-RUN groupadd --gid 1000 python && \
+RUN groupadd --gid 1000 python && \\
     useradd  --uid 1000 --gid python --shell /bin/bash --create-home python
 
 USER 1000
@@ -44,15 +44,15 @@ RUN poetry install --no-interaction --ansi
 END
 
 cat <<END > "$1"/Dockerfile.gpu
-FROM nvidia/cuda:10.1-cudnn7-runtime
+FROM nvidia/cuda:11.0-runtime-ubuntu20.04
 
-ENV LANG="C.UTF-8" LC_ALL="C.UTF-8" PATH="/home/python/.poetry/bin:/home/python/.local/bin:$PATH" PIP_NO_CACHE_DIR="false"
+ENV LANG="C.UTF-8" LC_ALL="C.UTF-8" PATH="/home/python/.poetry/bin:/home/python/.local/bin:\$PATH" PIP_NO_CACHE_DIR="false"
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    python3 python3-pip python3-venv python-is-python3 curl ca-certificates vim && \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \\
+    python3 python3-pip python3-venv python-is-python3 curl ca-certificates vim && \\
     rm -rf /var/lib/apt/lists/*
 
-RUN groupadd --gid 1000 python && \
+RUN groupadd --gid 1000 python && \\
     useradd  --uid 1000 --gid python --shell /bin/bash --create-home python
 
 USER 1000
@@ -101,7 +101,7 @@ tensorboard:
 t: tensorboard
 
 gpu:
-	@docker run --runtime=nvidia --ipc=host -it --rm -v \$(srcdir):/home/python/app/ -v \$(datadir):/data --entrypoint=/bin/bash \$(dockerimage)
+  @docker run --gpus all --ipc=host -it --rm -v \$(srcdir):/home/python/app/ -v \$(datadir):/data --entrypoint=/bin/bash \$(dockerimage)
 
 g: gpu
 
@@ -142,6 +142,7 @@ make gpu datadir=/path/to/dataset
 
 
 ## Model training
+Inside your docker container, run -
 \`\`\`bash
 poetry run $1 train --dataset /data/train \\
 --model /data/models \\
@@ -151,6 +152,7 @@ poetry run $1 train --dataset /data/train \\
 \`\`\`
 
 ## Prediction
+Inside your docker container, run -
 \`\`\`bash
 poetry run $1 predict --dataset /data/predict \\
 --checkpoint /data/models/best-checkpoint.pth \\
@@ -158,9 +160,43 @@ poetry run $1 predict --dataset /data/predict \\
 --batch-size 512
 \`\`\`
 
+## Monitor Tensorboard
+To monitor the loss plots on tensorboard, run the following command from your terminal-
+\`\`\`bash
+make tensorboard datadir=/path/to/runs_directory
+\`\`\`
+Go to \`localhost:6006\` in your browser to monitor the tensorboard plots
+
 ## References
 
 ## License
+Copyright © 2020 $2 $3
+
+Distributed under the MIT License (MIT).
+END
+
+cat <<END > "$1"/LICENSE.md
+MIT License
+
+Copyright (c) 2020 $2 $3
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 END
 
 cat <<END > "$1"/"$1"/cli/__main__.py
@@ -203,6 +239,7 @@ cat <<END > "$1"/"$1"/datasets.py
 import numpy as np
 from torch.utils.data import Dataset
 
+# TODO 1: Create a your own custom Dataset here
 
 class DummyDataset(Dataset):
 	def __init__(self, paths, transform=None):
@@ -226,6 +263,7 @@ END
 cat <<END > "$1"/"$1"/models.py
 import torch.nn as nn
 
+# TODO 2: Write your model architecture in a new model class here
 
 class DummyModel(nn.Module):
     def __init__(self):
@@ -240,7 +278,7 @@ class DummyModel(nn.Module):
 END
 
 cat <<END > "$1"/"$1"/transforms.py
-
+# TODO 3: Create a your own custom transforms here
 
 class DummyTransform:
 	def __init__(self):
@@ -263,6 +301,7 @@ from torch.utils.data import DataLoader, random_split
 
 from tqdm import tqdm
 
+# TODO 4: Import your dataset, model and transforms
 from $1.models import DummyModel
 from $1.datasets import DummyDataset
 from $1.transforms import DummyTransform
@@ -281,9 +320,12 @@ def main(args):
         device = torch.device("cpu")
 
     writer = SummaryWriter()
+
+    # TODO 5: Change from DummyTransform to your transforms or inbuilt pytorch transforms
     transforms = Compose([DummyTransform(),
                           DummyTransform()])
 
+    # TODO 6: Change from DummyDataset to your dataset
     dataset = DummyDataset(args.dataset, transform=transforms)
 
     num_train = int(len(dataset) * 0.9)
@@ -297,10 +339,12 @@ def main(args):
     val_loader = DataLoader(val_dataset, batch_size=args.batch_size,
                             num_workers=args.num_workers, shuffle=False)
 
+    # TODO 7: Change from DummyModel to your model
     model = DummyModel()
     model = model.to(device)
     model = nn.DataParallel(model)
 
+    # TODO 8: Change optimizer and loss functions as needed
     optimizer = Adam(model.parameters(), lr=1e-4)
     criterion = nn.NLLLoss()
 
@@ -409,6 +453,7 @@ from torchvision.transforms import Compose
 
 from tqdm import tqdm
 
+# TODO 9: Import your dataset, model and transforms
 from $1.models import DummyModel
 from $1.transforms import DummyTransform
 from $1.datasets import DummyDataset
@@ -423,6 +468,7 @@ def main(args):
         print("🐌 Running on CPU(s)", file=sys.stderr)
         device = torch.device("cpu")
 
+    # TODO 10: Change from DummyModel to your model
     model = DummyModel()
 
     for params in model.parameters():
@@ -431,9 +477,11 @@ def main(args):
     model = model.to(device)
     model = nn.DataParallel(model)
 
+    # TODO 11: Change from DummyTransform to your transforms or inbuilt pytorch transforms
     transforms = Compose([DummyTransform(),
                           DummyTransform()])
 
+    # TODO 12: Change from DummyDataset to your dataset
     dataset = DummyDataset(args.dataset, transform=transforms)
 
     loader = DataLoader(dataset, batch_size=args.batch_size, num_workers=args.num_workers, shuffle=False)
@@ -458,7 +506,7 @@ cat <<END > "$1"/pyproject.toml
 name = "$1"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["$2 $3 <$4>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -1191,4 +1239,4 @@ zipp = [
     {file = "zipp-3.4.0.tar.gz", hash = "sha256:ed5eee1974372595f9e416cc7bbeeb12335201d8081ca8a0743c954d4446e5cb"},
 ]
 END
-
+echo "Voila!"
