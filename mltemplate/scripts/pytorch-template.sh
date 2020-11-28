@@ -165,7 +165,7 @@ To monitor the loss plots on tensorboard, run the following command from your te
 \`\`\`bash
 make tensorboard datadir=/path/to/runs_directory
 \`\`\`
-
+Go to \`localhost:6006\` in your browser to monitor the tensorboard plots
 
 ## References
 
