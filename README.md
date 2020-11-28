@@ -2,9 +2,9 @@
 
 ML template is an easy to use tool to automate the boiler plate code for most machine learning projects.
 
-This tool creates an easy to use project architecture with poetry package manager for machine learning projects.
+This tool creates a user-oriented project architecture for machine learning projects.
 
-Modify the code under `#TODO` comments in the project repository to easily adapt the template to your use-case.
+Modify the code under `#TODO` comments in the template project repository to easily adapt the template to your use-case.
 
 # How to use it?
 1. Install the package as - `pip install mltemplate`
