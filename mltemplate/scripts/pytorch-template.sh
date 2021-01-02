@@ -1,10 +1,25 @@
 #!/bin/bash
 
 echo "Creating ML template for " $1
-eval "mkdir -p $1/{$1/cli,notebooks}"
-eval "touch $1/$1/cli/{__init__,__main__,train,predict}.py"
-eval "touch $1/$1/{__init__,models,transforms,datasets}.py"
-eval "touch $1/{.flake8,.gitignore,.dockerignore,Makefile,Dockerfile.cpu,Dockerfile.gpu,README.md,LICENSE.md,pyproject.toml}"
+eval "mkdir -p $1/$1/cli"
+eval "mkdir -p $1/$1/notebooks"
+eval "touch $1/$1/cli/__init__.py"
+eval "touch $1/$1/cli/__main__.py"
+eval "touch $1/$1/cli/train.py"
+eval "touch $1/$1/cli/predict.py"
+eval "touch $1/$1/__init__.py"
+eval "touch $1/$1/models.py"
+eval "touch $1/$1/transforms.py"
+eval "touch $1/$1/datasets.py"
+eval "touch $1/.flake8"
+eval "touch $1/.gitignore"
+eval "touch $1/.dockerignore"
+eval "touch $1/Makefile"
+eval "touch $1/Dockerfile.cpu"
+eval "touch $1/Dockerfile.gpu"
+eval "touch $1/README.md"
+eval "touch $1/LICENSE.md"
+eval "touch $1/pyproject.toml"
 
 cat <<END > "$1"/.flake8
 [flake8]
