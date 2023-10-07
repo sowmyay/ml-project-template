@@ -1,6 +1,6 @@
 # ML Template
 
-ML template is an easy to use tool to automate the boiler plate code for most machine learning projects.
+ML template is an easy-to-use tool to automate the boilerplate code for most machine learning projects.
 
 This tool creates a user-oriented project architecture for machine learning projects.
 
@@ -17,32 +17,36 @@ This creates a project directory in your current folder similar to -
 template
 ├── Dockerfile.cpu
 ├── Dockerfile.gpu
+├── LICENSE.md
 ├── Makefile
-├── pyproject.toml
-├── poetry.lock
-├── notebooks
 ├── README.md
+├── jupyter.sh
+├── requirements.txt
 └── template
+    ├── __init__.py
+    ├── __main__.py
     ├── cli
     │   ├── __init__.py
-    │   ├── __main__.py
     │   ├── predict.py
     │   └── train.py
-    ├── __init__.py
-    ├── models.py
-    ├── datasets.py
-    └── transforms.py
+    ├── notebooks
+    └── src
+        ├── __init__.py
+        ├── models.py
+        ├── datasets.py
+        └── transforms.py
 ```
 All you have to do next is -
-1. Head to `template/datasets.py` and modify create a new dataset that will work for your use case
-2. Navigate to `template/models.py` and create a new model class with your sota (or not) architecture
-3. In `template/transforms.py` add transforms such as Normalizer, Denormalize etc.
-4. Follow the `TODO` steps in `template/cli/train.py` and `template/cli/predict.py` to make the necessary changes
+1. Update python frameworks and versions in `template/requirements.txt` as need for your project
+2. Head to `template/datasets.py` and modify create a new dataset that will work for your use case
+3. Navigate to `template/models.py` and create a new model class with your sota (or not) architecture
+4. In `template/transforms.py` add transforms such as Normalizer, Denormalize etc.
+5. Follow the `TODO` steps in `template/cli/train.py` and `template/cli/predict.py` to make the necessary changes
 
 Checkout the `README.md` in the `template` directory for further instructions on how to train, predict and also monitor your loss plots using tensor board.
 
 # Future Work
-Currently this package only supports boilerplate creation for ML projects in `pytorch`
+Currently, this package only supports boilerplate creation for ML projects in `pytorch`
 
 We plan to support `tensorflow` in the future.
 
