@@ -51,16 +51,11 @@ Currently, this package only supports boilerplate creation for ML projects in `p
 We plan to support `tensorflow` in the future.
 
 # Development
-To create a new version of the framework, update version in `pyproject.toml` file
-
-Package library using -
+To create a new version of the framework, update the version in `pyproject.toml` file
+Merge your changes to main and then publish git tag to trigger the release ci
 ```bash
-poetry build
-```
-
-Publish library using -
-```bash
-poetry publish
+git tag <x.x.x>
+git push origin <x.x.x>
 ```
 ## License
 Copyright © 2020 Sowmya Yellapragada

@@ -103,7 +103,7 @@ tensorboard:
 t: tensorboard
 
 gpu:
-  @docker run --gpus all --ipc=host -it --rm -v \$(srcdir):/home/python/app/ -v \$(datadir):/data --entrypoint=/bin/bash \$(dockerimage)
+	@docker run --gpus all --ipc=host -it --rm -v \$(srcdir):/home/python/app/ -v \$(datadir):/data --entrypoint=/bin/bash \$(dockerimage)
 
 g: gpu
 
@@ -112,14 +112,13 @@ jupyter-gpu:
 
 jg: jupyter-gpu
 
-
 publish:
 	@docker image save \$(dockerimage) 	  | pv -N "Publish \$(dockerimage) to \$(sshopts)" -s \$(shell docker image inspect \$(dockerimage) --format "{{.Size}}") 	  | ssh \$(sshopts) "docker image load"
 
 p: publish
 
-
 .PHONY: install i run r update u gpu g publish p tensorboard t jupyter j jupyter-gpu jg
+
 END
 
 cat <<END > "$1"/README.md
