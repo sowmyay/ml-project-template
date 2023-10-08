@@ -29,7 +29,7 @@ def main():
     script_path = os.path.join(current_directory.parent, "scripts", "template.sh")
     template_name = f"{args.language}_template"
     template_path = os.path.join(current_directory.parent, template_name)
-    os.system(f'sh {script_path} {args.project} {template_path} {template_name}')
+    os.system(f'bash {script_path} {args.project} {template_path} {template_name}')
 
 
 if __name__ == "__main__":
