@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mltemplate"
-version = "1.0.3"
+version = "1.0.4"
 description = "Templating tool with boiler plate code for building robust machine learning projects in python."
 authors = ["Sowmya Yellapragada <sowmyayellapragada@gmail.com>"]
 license = "MIT"
