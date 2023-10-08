@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mltemplate"
-version = "1.0.2"
+version = "1.0.3"
 description = "Templating tool with boiler plate code for building robust machine learning projects in python."
 authors = ["Sowmya Yellapragada <sowmyayellapragada@gmail.com>"]
 license = "MIT"
@@ -10,7 +10,7 @@ repository = "https://github.com/sowmyay/ml-project-template"
 keywords = ["template", "machine learning", "pytorch", "deep learning"]
 include = [
     "LICENSE",
-    "mltemplate/scripts/pytorch-template.sh"
+    "mltemplate/scripts/template.sh"
 ]
 
 [tool.poetry.dependencies]
