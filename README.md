@@ -8,7 +8,7 @@ Modify the code under `#TODO` comments in the template project repository to eas
 
 # How to use it?
 1. Install the package as - `pip install mltemplate`
-2. Then, simply run `mltempate` from your terminal and follow the prompts
+2. Then, simply run `mltempate <project-name>` from your terminal to create your template
 
 And Voila!
 
@@ -48,7 +48,7 @@ Checkout the `README.md` in the `template` directory for further instructions on
 # Future Work
 Currently, this package only supports boilerplate creation for ML projects in `pytorch`
 
-We plan to support `tensorflow` in the future.
+We plan to support `keras` in the future.
 
 # Development
 
