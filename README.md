@@ -8,7 +8,7 @@ Modify the code under `#TODO` comments in the template project repository to eas
 
 # How to use it?
 1. Install the package as - `pip install mltemplate`
-2. Then, simply run `mltempate` from your terminal and follow the prompts
+2. Then, simply run `mltempate <project-name>` from your terminal to create your template
 
 And Voila!
 
@@ -48,9 +48,23 @@ Checkout the `README.md` in the `template` directory for further instructions on
 # Future Work
 Currently, this package only supports boilerplate creation for ML projects in `pytorch`
 
-We plan to support `tensorflow` in the future.
+We plan to support `keras` in the future.
 
 # Development
+
+## Local Testing
+Run the following command to generate the packaged library
+```bash
+poetry build
+```
+
+Install the library from the generated whl file using
+```bash
+pip3 install dist/mltemplate-<version>-py3-none-any.whl --force-reinstall
+```
+You can then test the functionality of the pypi package.
+
+## Publish package to PyPi
 To create a new version of the framework, update the version in `pyproject.toml` file
 Merge your changes to main and then publish git tag to trigger the release ci
 ```bash
